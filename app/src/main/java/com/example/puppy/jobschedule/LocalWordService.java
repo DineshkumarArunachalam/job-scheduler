@@ -1,9 +1,9 @@
 package com.example.puppy.jobschedule;
 
-import android.app.Service;
+import android.app.IntentService;
 import android.content.Intent;
-import android.os.Binder;
-import android.os.IBinder;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,31 +14,21 @@ import java.util.Random;
  * Created by puppy on 1/8/2018.
  */
 
-public class LocalWordService extends Service {
-    private final IBinder mBinder = new MyBinder();
+public class LocalWordService extends IntentService {
+
     private List<String> resultList = new ArrayList<String>();
     private int counter = 1;
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        addResultValues();
-        return Service.START_NOT_STICKY;
+    public LocalWordService(String name) {
+        super(name);
     }
 
+
     @Override
-    public IBinder onBind(Intent intent) {
+    protected void onHandleIntent(@Nullable Intent intent) {
         addResultValues();
-        return mBinder;
-    }
-    public class MyBinder extends Binder {
-        LocalWordService getService() {
-            return LocalWordService.this;
-        }
     }
 
-    public List<String> getWordList() {
-        return resultList;
-    }
 
     private void addResultValues() {
         Random random = new Random();
@@ -47,5 +37,7 @@ public class LocalWordService extends Service {
         if (counter == Integer.MAX_VALUE) {
             counter = 0;
         }
+        Log.e("service",resultList.size()+"::::::");
+
     }
 }
